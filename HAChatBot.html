@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        #chat-container {
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #chat-header {
+            background-color: #4285f4;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        #chat-body {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        #menu-container {
+            max-height: 300px; /* Default height for menu container */
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        #menu {
+            background-color: #4285f4;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+            #menu button {
+                display: block;
+                width: 100%;
+                padding: 10px;
+                border: none;
+                background: none;
+                color: #fff;
+                text-align: left;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+                #menu button:hover {
+                    background-color: #3c78d8;
+                }
+
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+            #loading-overlay i {
+                font-size: 50px;
+                color: #4285f4;
+                animation: spin 1s infinite linear;
+            }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #search-container {
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #search-input {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        #search-button {
+            cursor: pointer;
+        }
+
+        #clear-button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-header">ChatBot</div>
+        <div id="chat-body"></div>
+        <div id="search-container">
+            <input type="text" id="search-input" placeholder="Enter information">
+            <button id="voice-button" disabled="disabled">
+                <i class="fas fa-microphone"></i>
+            </button>
+            <button id="search-button" onclick="search()">Search</button>
+            <button id="clear-button" onclick="clearChat()">Clear</button>
+        </div>
+        <div id="menu-container">
+            <div id="menu">
+                <button onclick="updateHeader('Predictive Policing for Enhanced Public Safety')">Predictive Policing for Enhanced Public Safety</button>
+                <button onclick="updateHeader('AI-Driven Data Analytics for Improved Decision-Making')">AI-Driven Data Analytics for Improved Decision-Making</button>
+                <button onclick="updateHeader('AI-Based Disaster Management and Response')">AI-Based Disaster Management and Response</button>
+                <button onclick="updateHeader('Task Automation via Chatbots for Citizen Support')">Task Automation via Chatbots for Citizen Support</button>
+                <button onclick="updateHeader('Enhanced large-scale infrastructure monitoring')">Enhanced large-scale infrastructure monitoring</button>
+            </div>
+        </div>
+        <div id="loading-overlay">
+            <i class="fas fa-circle-notch"></i>
+            <p id="loading-message">Please wait for the result...</p>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage(message) {
+            document.getElementById('chat-body').innerHTML += `<p>User: ${message}</p>`;
+            showLoadingOverlay(message);
+            setTimeout(() => {
+                document.getElementById('chat-body').innerHTML += `<p>ChatBot: Processing result for "${message}".Please wait for the result.</p>`;
+                hideLoadingOverlay();
+            }, 2000);
+        }
+
+        function updateHeader(optionName) {
+            document.getElementById('chat-header').innerText = optionName;
+            toggleMenu(); // Close the menu after updating the header
+        }
+
+        function showLoadingOverlay(message) {
+            document.getElementById('loading-overlay').style.display = 'flex';
+            document.getElementById('loading-message').innerText = `Processing result for "${message}". Please wait for the result.`;
+        }
+
+        function hideLoadingOverlay() {
+            document.getElementById('loading-overlay').style.display = 'none';
+        }
+
+        function toggleMenu() {
+            var menuContainer = document.getElementById('menu-container');
+            var menu = document.getElementById('menu');
+
+            if (menuContainer.style.maxHeight) {
+                menuContainer.style.maxHeight = null;
+                menu.style.maxHeight = null;
+            } else {
+                menuContainer.style.maxHeight = menu.scrollHeight + "px";
+                menu.style.maxHeight = menu.scrollHeight + "px";
+            }
+        }
+
+        function search() {
+            var searchInput = document.getElementById('search-input').value;
+            if (searchInput.trim() !== '') {
+                document.getElementById('chat-body').innerHTML += `<p>User: ${searchInput}</p>`;
+                showLoadingOverlay(searchInput);
+                setTimeout(() => {
+                    document.getElementById('chat-body').innerHTML += `<p>ChatBot: Processing result for "${searchInput}". Please wait for the result.</p>`;
+                    hideLoadingOverlay();
+                }, 2000);
+                document.getElementById('search-input').value = '';
+            } else {
+                alert('Please enter information before searching.');
+            }
+        }
+
+        function clearChat() {
+            document.getElementById('chat-body').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
